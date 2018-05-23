@@ -27,7 +27,7 @@ function [data,si,h] = opening_abf(file_number)
     split = channels / 2;
     figure;
     for k=1:channels
-        subplot(split,split,k)
+        subplot(split,2,k)
         plot(data(:,k,1))
         title(num2str(k))
     end  
