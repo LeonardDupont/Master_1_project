@@ -1,4 +1,4 @@
-function [] = animated_sweeps(electrophysiology_data,spikes,channel,start_sweep,stop_sweep,interpolated_calcium_data,region,loc_ONSET)
+function [] = animated_sweeps(electrophysiology_data,spikes,channel,start_sweep,stop_sweep,interpolated_calcium_data,region,ephys_sweeps)
 %This function is strictly used in the context of electrophysiology data
 %against calcium data alignment. It is quite fitting in that one sweep at
 %a time is being displayed, but one can navigate through sweeps using left
@@ -8,7 +8,7 @@ function [] = animated_sweeps(electrophysiology_data,spikes,channel,start_sweep,
  fig=figure('Name',['ROI',num2str(region)]);
  set(fig, 'KeyPressFcn',@keypress)
  
- sweep_max = length(loc_ONSET);
+ sweep_max = ephys_sweeps;
  sweep = 1;
     
     function redraw()
