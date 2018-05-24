@@ -24,11 +24,6 @@ calcium_data = imread_universal(movie.name);
 summed_frames = sumframe(calcium_data); %summing over all frames the value of each pixel
 fluorescence_ON = summed_frames > 2.5e6;%finding the frames where the fluorescence was ON, threshold is bad
 fluorescence_OFF = summed_frames < 2.5e6;
-cropped_data = calcium_data; %just for visual input, could be used later to visualise data without gaps
-cropped_data(:,:,fluorescence_OFF(:)) = [];
-sf = sumframe(cropped_data);
-figure;
-plot(sf)
 nb_frames = length(summed_frames);
 
 ONSET = zeros(nb_frames,1); 
@@ -39,15 +34,21 @@ for k=2:nb_frames
     
     if switching==1 %then it was switched on
         ONSET(k)=1; %adding a 1 at the right position
+        fluorescence_OFF(k) = 1; %this way we make sure we loose discontinuities
         
     elseif switching==-1 %then it was switched off
         OFFSET(k)=1;     %ditto
+        fluorescence_OFF(k-1)=1;
     end
 end
 loc_ONSET = find(ONSET==1); %finally, we create two shorter lists only keeping the indices
 loc_OFFSET = find(OFFSET==1);
 
 
-        
+cropped_data = calcium_data; %just for visual input, could be used later to visualise data without gaps
+cropped_data(:,:,fluorescence_OFF(:)) = [];
+sf = sumframe(cropped_data);
+figure;
+plot(sf) 
     
 

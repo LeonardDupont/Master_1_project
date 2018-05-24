@@ -1,4 +1,4 @@
-function [] = animated_sweeps_1PLOT(normalised_sweeps,spikes,start_sweep,stop_sweep,interpolated_calcium_data_DeltaFF,region,ephys_sweeps)
+function [] = animated_sweeps_1PLOT(normalised_sweeps,start_sweep,stop_sweep,interpolated_calcium_data_DeltaFF,region,ephys_sweeps)
 %This function is strictly used in the context of electrophysiology data
 %against calcium data alignment. It is quite fitting in that one sweep at
 %a time is being displayed, but one can navigate through sweeps using left
@@ -22,8 +22,8 @@ function [] = animated_sweeps_1PLOT(normalised_sweeps,spikes,start_sweep,stop_sw
         max_calcium = max(interpolated_calcium_data_DeltaFF(:,sweep,region));
         x = -.5 - min_elec + max_calcium;
         plot(interpolated_calcium_data_DeltaFF(:,sweep,region)-x,'b','Linewidth',2)
-        star_position = max(interpolated_calcium_data_DeltaFF(:,sweep,region))-.2;
-        plot(spikes(sweep),star_position, '*')
+        [~,LOC] = findpeaks(interpolated_calcium_data_DeltaFF(:,sweep,region),'MinPeakProminence',.1);
+        vline(LOC,'-.')
         axis tight
     end
 
