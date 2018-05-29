@@ -32,7 +32,7 @@ time = linspace(0,T_sweep,h.si); %a list with time values
 
 spikes = zeros(sweeps,1);
 for k=1:sweeps
-    [~,LOC]=findpeaks(data(:,ch_pks,k),'MinPeakProminence',10); %finding the first peak of the k-ieth sweep
+    [~,LOC]=findpeaks(data(:,ch_pks,k),'MinPeakProminence',15); %finding the first peak of the k-ieth sweep
     spikes(k)= LOC(1,1); 
 end
 
@@ -58,13 +58,19 @@ aligned_data = aligned_data((max_jitter+1):(points-1),1,:);
 %filled value for all sweeps (max_jitter+1) and y is the last compulsorily
 %filled value for all sweeps (nb of points -1). 
 
+
+
 axh=[]; figure, hold on %now we also get the input trac (ch_pks) above
 xlabel('t (ms)') 
 ylabel('V_{m} (mV)')
-axh(1) = subplot(15,1,1:5);
+axh(1) = subplot(15,1,1:5); hold on
 title('Aligned responses of the cell on the first spike of its pair')
-plot(squeeze(data(:,ch_pks,2)))
+ylabel('V_{m}')
+plot(squeeze(data(:,ch_pks,find(spikes==min(spikes)))));
+vline(min(spikes),'-.')
 axh(2) = subplot(15,1,7:15); hold on
+ylabel('V_{m}')
+xlabel('t')
 if align_on_y
     initial = aligned_data(1,ch_trc,1);
     for k=1:sweeps
@@ -82,7 +88,8 @@ else
     end
 end
 plot(smooth(mean(squeeze(aligned_data(:,1,:))'),10),'k-','linewidth',2)
-plot(min(spikes),MAX+1,'*') 
+%plot(min(spikes),MAX+1,'*') 
+vline(min(spikes),'-.')
 linkaxes(axh,'x')
 axis tight
 disp('The max jitter is') ; disp(max_jitter) ; disp('ms')
